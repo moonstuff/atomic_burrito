@@ -76,6 +76,7 @@ Those columns are common to all events. However the later columns depend on the 
 
 `click` events:
 * The fifth column is the website that the user clicked on. Like search terms the data has been put through an anonymizing hash and is a 64 byte string.
+* The sixth column is the ranking of the click. An click of "1" means it had the first rank.
 
 `appearance` events:
 * The fifth column is the website that appeared in a search result. It is an anonymous 64 byte string.
