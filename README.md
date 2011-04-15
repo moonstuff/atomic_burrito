@@ -26,9 +26,9 @@ Introduction
 
 This is an experiment in data storage, aggregation and reporting. The basic premise is simple. Pretend we are running a very popular search engine and we want to record statistics for analysis. There are three different types of events that we want to keep track of:
 
-* `search` events -- when a user performs a search.
-* `appearance` events -- when a website showed in the search results.
-* `click` events -- when a website link was clicked.
+* search events -- when a user performs a search.
+* appearance events -- when a website showed in the search results.
+* click events -- when a website link was clicked.
 
 The data is largely dominated by appearance events. For every search there would be one search event, maybe a hundred appearance events and optionally one or more click events.
 
@@ -71,14 +71,17 @@ Throughout the codebase you may see references to the mythical *events.gz*. This
 
 Those columns are common to all events. However the later columns depend on the event type.
 
-`search` events:
+search events:
+
 * The fifth column is a space seperated list of search terms. Each term is a hashed 64 byte string. Because of the one-way random-seeded hash you cannot perform a reverse operation to find out what they originally searched for. This is good because the data was very private.
 
-`click` events:
+click events:
+
 * The fifth column is the website that the user clicked on. Like search terms the data has been put through an anonymizing hash and is a 64 byte string.
 * The sixth column is the ranking of the click. An click of "1" means it had the first rank.
 
-`appearance` events:
+appearance events:
+
 * The fifth column is the website that appeared in a search result. It is an anonymous 64 byte string.
 * The sixth column is the ranking of the appearance. An appearance of "0" means it had the first rank.
 
