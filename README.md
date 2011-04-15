@@ -8,7 +8,7 @@ A very important notice
 
 This toolkit uses the [AOL search data](http://en.wikipedia.org/wiki/AOL_search_data_scandal) provided in 2006. Though the data used in this toolkit is anonymized, please consider the privacy implications of downloading and using this data set. I would encourage you to anonymize any data that you use (by, for example, removing the AnonID field or hashing all URLs and query strings).
 
-In this toolkit we use the original AnonIDs, but all search terms and URLs are run through SHA with a random salt (the salt is then discarded). See the `derpify` script for details. Several tools are run 
+In this toolkit we use the original AnonIDs, but all search terms and URLs are run through SHA with a random salt (the salt is then discarded). See the `derpify` script for details.
 
 Also, the dataset is very, very, NSFW...
 
