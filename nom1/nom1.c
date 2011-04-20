@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <kclangc.h>
 #include "nom1.h"
 
 // Yeah, parsing input... this should do the trick...
@@ -30,65 +28,6 @@ struct {
   long clicks;
   long appearances;
 } stats = { 0, 0, 0, 0 };
-
-int main(int argc, char** argv) {
-  char *appearances_filename = argv[1];
-  char *urls_filename = argv[2];
-
-  if (argc != 3) {
-    fprintf(stderr, "usage: %s <appearances database> <urls database>\n", argv[0]);
-    return 1;
-  }
-
-  appearances = kcdbnew();
-  if (!kcdbopen(appearances, appearances_filename, KCOWRITER | KCOCREATE)) {
-    fprintf(stderr, "appearances database open error: %s\n", kcecodename(kcdbecode(appearances)));
-  }
-
-  urls = kcdbnew();
-  if (!kcdbopen(urls, urls_filename, KCOWRITER | KCOCREATE)) {
-    fprintf(stderr, "url database open error: %s\n", kcecodename(kcdbecode(urls)));
-  }
-
-  while (fgets(line_buffer, BUFSIZE, stdin)) {
-    stats.lines++;
-    
-    if (parse_event() != 0)
-      continue;
-
-    if (aggregate_event() != 0)
-      continue;
- }
-
-  fprintf(stderr, "EOF reached: %ld records\n", stats.lines);
-  fprintf(stderr, "%ld searches, %ld appearances, %ld clicks\n", stats.searches, stats.appearances, stats.clicks);
- 
-  if (!kcdbclose(appearances)) {
-    fprintf(stderr, "appearances database close error: %s\n", kcecodename(kcdbecode(appearances)));
-  }
-
-  if (!kcdbclose(urls)) {
-    fprintf(stderr, "url database close error: %s\n", kcecodename(kcdbecode(urls)));
-  }
-
-  kcdbdel(appearances);
-  kcdbdel(urls);
-
-  return 0;
-}
-
-int aggregate_event() {
-  // Now perform processing based on event_type
-  if (strcmp("appearance", event.event_type) == 0) {
-    return aggregate_appearance_event() || store_url();
-  } else if (strcmp("search", event.event_type) == 0) {
-    return aggregate_search_event();
-  } else if (strcmp("click", event.event_type) == 0)  {
-    return aggregate_click_event() || store_url();
-  } else {
-   return 1;
-  }
-}
 
 int aggregate_appearance_event() {
   stats.appearances++;
@@ -122,6 +61,20 @@ int store_url() {
   }
   return 0;
 }
+
+int aggregate_event() {
+  // Now perform processing based on event_type
+  if (strcmp("appearance", event.event_type) == 0) {
+    return aggregate_appearance_event() || store_url();
+  } else if (strcmp("search", event.event_type) == 0) {
+    return aggregate_search_event();
+  } else if (strcmp("click", event.event_type) == 0)  {
+    return aggregate_click_event() || store_url();
+  } else {
+   return 1;
+  }
+}
+
 
 int parse_event() {
   event.session = strtok(line_buffer, delimiter);
@@ -176,5 +129,52 @@ int parse_event() {
 
   return 0;
 }
+
+int main(int argc, char** argv) {
+  char *appearances_filename = argv[1];
+  char *urls_filename = argv[2];
+
+  if (argc != 3) {
+    fprintf(stderr, "usage: %s <appearances database> <urls database>\n", argv[0]);
+    return 1;
+  }
+
+  appearances = kcdbnew();
+  if (!kcdbopen(appearances, appearances_filename, KCOWRITER | KCOCREATE)) {
+    fprintf(stderr, "appearances database open error: %s\n", kcecodename(kcdbecode(appearances)));
+  }
+
+  urls = kcdbnew();
+  if (!kcdbopen(urls, urls_filename, KCOWRITER | KCOCREATE)) {
+    fprintf(stderr, "url database open error: %s\n", kcecodename(kcdbecode(urls)));
+  }
+
+  while (fgets(line_buffer, BUFSIZE, stdin)) {
+    stats.lines++;
+    
+    if (parse_event() != 0)
+      continue;
+
+    if (aggregate_event() != 0)
+      continue;
+ }
+
+  fprintf(stderr, "EOF reached: %ld records\n", stats.lines);
+  fprintf(stderr, "%ld searches, %ld appearances, %ld clicks\n", stats.searches, stats.appearances, stats.clicks);
+ 
+  if (!kcdbclose(appearances)) {
+    fprintf(stderr, "appearances database close error: %s\n", kcecodename(kcdbecode(appearances)));
+  }
+
+  if (!kcdbclose(urls)) {
+    fprintf(stderr, "url database close error: %s\n", kcecodename(kcdbecode(urls)));
+  }
+
+  kcdbdel(appearances);
+  kcdbdel(urls);
+
+  return 0;
+}
+
 
 

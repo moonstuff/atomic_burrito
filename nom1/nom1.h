@@ -1,7 +1,7 @@
-int aggregate_event();
-int aggregate_appearance_event();
-int aggregate_search_event();
-int aggregate_click_event();
-int parse_event();
-int store_url();
-int produce_reports();
+#ifndef NOM1_H
+#define NOM1_H
+
+#include <stdio.h>
+#include <kclangc.h>
+
+#endif
