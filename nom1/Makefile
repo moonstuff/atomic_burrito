@@ -1,7 +1,11 @@
-all: compile
+CFLAGS += -Wall -g
+CC = clang
+LIBS = -lkyotocabinet 
 
-compile:
-	clang -lkyotocabinet -g nom1.c -o nom1
+all: nom1
+
+nom1: *.c *.h
+	$(CC) $(CFLAGS) -o $@ *.c $(LIBS)
 
 clean:
-	rm -f nom1
+	rm -f *.o nom1
