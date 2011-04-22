@@ -25,6 +25,7 @@ struct stats {
   unsigned long searches;
   unsigned long clicks;
   unsigned long appearances;
+  unsigned long urls;
   unsigned long reports;
 };
 

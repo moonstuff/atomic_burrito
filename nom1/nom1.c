@@ -1,6 +1,6 @@
 #include "nom1.h"
 
-struct stats stats;
+struct stats stats = {0, 0, 0, 0, 0, 0};
 
 int main(int argc, char *argv[]) {
   char *appearances_filename = argv[1];
@@ -38,10 +38,10 @@ int main(int argc, char *argv[]) {
     if (aggregate_event(&event) != 0)
       continue;
   }
-  generate_url_reports();
+  fprintf(stderr, "EOF reached: %ld records: \n", stats.lines);
+  fprintf(stderr, "%ld searches, %ld appearances, %ld clicks, %ld urls\n", stats.searches, stats.appearances, stats.clicks, stats.urls);
 
-  fprintf(stderr, "EOF reached: %ld records\n", stats.lines);
-  fprintf(stderr, "%ld searches, %ld appearances, %ld clicks, %ld reports\n", stats.searches, stats.appearances, stats.clicks, stats.reports);
+  generate_url_reports();
  
   if (!kcdbclose(appearances)) {
     fprintf(stderr, "appearances database close error: %s\n", kcecodename(kcdbecode(appearances)));
