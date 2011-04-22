@@ -25,6 +25,7 @@ struct stats {
   unsigned long searches;
   unsigned long clicks;
   unsigned long appearances;
+  unsigned long reports;
 };
 
 extern struct stats stats;
@@ -32,8 +33,10 @@ extern struct stats stats;
 // DB access fun
 KCDB *appearances;
 KCDB *urls;
+KCDB *url_reports;
 
 extern int aggregate_event(struct event *event);
 extern int parse_event(char *line_buffer, struct event *event);
+extern int generate_url_reports();
 
 #endif

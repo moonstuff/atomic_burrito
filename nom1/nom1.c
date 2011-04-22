@@ -5,11 +5,12 @@ struct stats stats;
 int main(int argc, char *argv[]) {
   char *appearances_filename = argv[1];
   char *urls_filename = argv[2];
+  char *url_reports_filename = argv[3];
   struct event event;
   char line_buffer[BUFSIZE];
 
-  if (argc != 3) {
-    fprintf(stderr, "usage: %s <appearances database> <urls database>\n", argv[0]);
+  if (argc != 4) {
+    fprintf(stderr, "usage: %s <appearances database> <urls database> <url reports database>\n", argv[0]);
     return 1;
   }
 
@@ -23,6 +24,11 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "url database open error: %s\n", kcecodename(kcdbecode(urls)));
   }
 
+  url_reports = kcdbnew();
+  if (!kcdbopen(url_reports, url_reports_filename, KCOWRITER | KCOCREATE)) {
+    fprintf(stderr, "url reports database open error: %s\n", kcecodename(kcdbecode(url_reports)));
+  }
+
   while (fgets(line_buffer, BUFSIZE-1, stdin)) {
     stats.lines++;
     
@@ -31,10 +37,11 @@ int main(int argc, char *argv[]) {
 
     if (aggregate_event(&event) != 0)
       continue;
- }
+  }
+  generate_url_reports();
 
   fprintf(stderr, "EOF reached: %ld records\n", stats.lines);
-  fprintf(stderr, "%ld searches, %ld appearances, %ld clicks\n", stats.searches, stats.appearances, stats.clicks);
+  fprintf(stderr, "%ld searches, %ld appearances, %ld clicks, %ld reports\n", stats.searches, stats.appearances, stats.clicks, stats.reports);
  
   if (!kcdbclose(appearances)) {
     fprintf(stderr, "appearances database close error: %s\n", kcecodename(kcdbecode(appearances)));
@@ -44,8 +51,13 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "url database close error: %s\n", kcecodename(kcdbecode(urls)));
   }
 
+  if (!kcdbclose(url_reports)) {
+    fprintf(stderr, "url reports database close error: %s\n", kcecodename(kcdbecode(url_reports)));
+  }
+
   kcdbdel(appearances);
   kcdbdel(urls);
+  kcdbdel(url_reports);
 
   return 0;
 }
