@@ -1,6 +1,5 @@
 #!/usr/bin/env luajit
 
-require "stringy"
 kc = require "kyotocabinet"
 
 if #arg ~= 3 then
@@ -35,13 +34,13 @@ stats = {
 }
 
 for line in io.lines() do
-  local event = stringy.split(line, "\t")
+  local event = kc.split(line, "\t")
   local event_type = event[4]
 
   if event_type == "appearance" then
     stats.appearances = stats.appearances + 1
-    url = event[5]
-    date = stringy.split(event[3], " ")[1]
+    local url = event[5]
+    local date = kc.split(event[3], " ")[1]
     appearances:increment(string.format("%s-%s",url,date), 1)
     urls:increment(url, 1)
   elseif event_type == "click" then
