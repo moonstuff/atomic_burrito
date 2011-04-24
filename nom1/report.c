@@ -23,8 +23,6 @@ const char *visit_url(const char *url, size_t key_size, const char *value, size_
     strncpy(report_buffer, existing_report, REPORT_BUFFER_LEN - 1);
     report_cursor = strlen(report_buffer);
     kcfree(existing_report);
-  } else {
-    report_cursor = report_cursor + snprintf(report_buffer, LINE_WIDTH, "%s\n", url);
   }
 
   for (long i=0; i<matching_records; i++) {
