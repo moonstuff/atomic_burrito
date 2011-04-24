@@ -24,11 +24,6 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "url database open error: %s\n", kcecodename(kcdbecode(urls)));
   }
 
-  url_reports = kcdbnew();
-  if (!kcdbopen(url_reports, url_reports_filename, KCOWRITER | KCOCREATE)) {
-    fprintf(stderr, "url reports database open error: %s\n", kcecodename(kcdbecode(url_reports)));
-  }
-
   while (fgets(line_buffer, BUFSIZE-1, stdin)) {
     stats.lines++;
     
@@ -41,7 +36,7 @@ int main(int argc, char *argv[]) {
   fprintf(stderr, "EOF reached: %ld records: \n", stats.lines);
   fprintf(stderr, "%ld searches, %ld appearances, %ld clicks, %ld urls\n", stats.searches, stats.appearances, stats.clicks, stats.urls);
 
-  generate_url_reports();
+  generate_url_reports(url_reports_filename);
  
   if (!kcdbclose(appearances)) {
     fprintf(stderr, "appearances database close error: %s\n", kcecodename(kcdbecode(appearances)));
@@ -51,13 +46,8 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "url database close error: %s\n", kcecodename(kcdbecode(urls)));
   }
 
-  if (!kcdbclose(url_reports)) {
-    fprintf(stderr, "url reports database close error: %s\n", kcecodename(kcdbecode(url_reports)));
-  }
-
   kcdbdel(appearances);
   kcdbdel(urls);
-  kcdbdel(url_reports);
 
   return 0;
 }

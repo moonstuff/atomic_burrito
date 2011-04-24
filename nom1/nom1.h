@@ -38,6 +38,6 @@ KCDB *url_reports;
 
 extern int aggregate_event(struct event *event);
 extern int parse_event(char *line_buffer, struct event *event);
-extern int generate_url_reports();
+extern int generate_url_reports(char *url_reports_filename);
 
 #endif

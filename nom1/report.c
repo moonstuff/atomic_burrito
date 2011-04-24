@@ -36,11 +36,24 @@ const char *visit_url(const char *url, size_t key_size, const char *value, size_
   return KCVISNOP;
 }
 
-int generate_url_reports() {
+int generate_url_reports(char *url_reports_filename) {
   fprintf(stdout, "generating url reports for %ld urls\n", kcdbcount(urls));
+
+  url_reports = kcdbnew();
+  if (!kcdbopen(url_reports, url_reports_filename, KCOWRITER | KCOCREATE)) {
+    fprintf(stderr, "url reports database open error: %s\n", kcecodename(kcdbecode(url_reports)));
+  }
+
   if (!kcdbiterate(urls, visit_url, NULL, 0)) {
     fprintf(stderr, "error iterating over url database: %s\n", kcecodename(kcdbecode(urls)));
   }
+  
+  if (!kcdbclose(url_reports)) {
+    fprintf(stderr, "url reports database close error: %s\n", kcecodename(kcdbecode(url_reports)));
+  }
+
+  kcdbdel(url_reports);
+
   return 0;
 }
 
