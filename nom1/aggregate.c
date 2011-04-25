@@ -3,11 +3,7 @@
 int aggregate_appearance_event(struct event *event) {
   stats.appearances++;
 
-  // key is "url-yyyy-mm-dd". appending strings is a little ugly...
-  char key[BUFSIZE];
-  int keylength = snprintf(key, BUFSIZE-1, "%s-", event->url);
-  strncat(key+keylength, event->occurred_at, 10);
-  if (kcdbincrint(appearances, key, strlen(key), 1) == INT64_MIN) {
+  if (kcdbincrint(appearances, event->url, strlen(event->url), 1) == INT64_MIN) {
     fprintf(stderr, "Count not increment count on line %ld: %s\n", stats.lines, kcecodename(kcdbecode(appearances)));
     return 1;
   }
@@ -41,7 +37,7 @@ int aggregate_event(struct event *event) {
   } else if (strcmp("search", event->event_type) == 0) {
     return aggregate_search_event(event);
   } else if (strcmp("click", event->event_type) == 0)  {
-    return aggregate_click_event(event) || store_url(event);
+    return aggregate_click_event(event);
   } else {
    return 1;
   }

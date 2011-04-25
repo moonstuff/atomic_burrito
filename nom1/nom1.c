@@ -1,15 +1,17 @@
 #include "nom1.h"
 
 struct stats stats = {0, 0, 0, 0, 0, 0};
+char *event_day;
 
 int main(int argc, char *argv[]) {
-  char *url_reports_filename = argv[1];
+  event_day = argv[1];
+  char *url_reports_filename = argv[2];
   char *derpderpderp = ""; // Why is this required? WHY WHY WHY?!?!?!?!?
   struct event event;
   char line_buffer[BUFSIZE];
 
-  if (argc != 2) {
-    fprintf(stderr, "usage: %s <url reports database>\n", argv[0]);
+  if (argc != 3) {
+    fprintf(stderr, "usage: %s <event day> <url reports database>\n", argv[0]);
     return 1;
   }
 

@@ -31,6 +31,7 @@ struct stats {
 };
 
 extern struct stats stats;
+extern char *event_day;
 
 // DB access fun
 KCDB *appearances;
