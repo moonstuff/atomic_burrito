@@ -3,8 +3,8 @@
 struct stats stats = {0, 0, 0, 0, 0, 0};
 
 int main(int argc, char *argv[]) {
-  char *urls_filename = argv[2];
   char *url_reports_filename = argv[1];
+  char *derpderpderp = ""; // Why is this required? WHY WHY WHY?!?!?!?!?
   struct event event;
   char line_buffer[BUFSIZE];
 
