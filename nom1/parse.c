@@ -3,7 +3,13 @@
 #define DELIMITER "\t"
 
 int parse_event(char *line_buffer, struct event *event) {
-  event->session = strtok(line_buffer, DELIMITER);
+  event->id = strtok(line_buffer, DELIMITER);
+  if (!event->session) {
+    fprintf(stderr, "No id provided in line %ld\n", stats.lines);
+    return 1;
+  }
+
+  event->session = strtok(NULL, DELIMITER);
   if (!event->session) {
     fprintf(stderr, "No session provided in line %ld\n", stats.lines);
     return 1;

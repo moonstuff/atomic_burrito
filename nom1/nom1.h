@@ -10,6 +10,7 @@
 // Yeah this is pretty kooky but it is simple and fun.
 // An "event" is just pointers to strings inside a buffer.
 struct event {
+  char *id;
   char *session;
   char *user_id;
   char *occurred_at;
