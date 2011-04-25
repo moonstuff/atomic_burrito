@@ -64,24 +64,25 @@ The anonymized data set
 
 Throughout the codebase you may see references to the mythical *events.gz*. This is the dataset that drives the entire system and it's a simple tab-seperated file:
 
-* The first column is the session id. This is derived from the AOL data by assuming users are performing queries from the same browser and sessions have a 30 minute timeout (see `sessionup`). It is a random string of 64 bytes.
-* The second column is the user id. This is preserved from the AOL data. It is an integer.
-* The third column is the date of the request, e.g. `2006-03-20 03:55:57`.
-* The fourth column is the event type, which is one of `search`, `click` or `appearance`.
+* The first column is the record id. This is a random string of 32 bytes.
+* The second column is the session id. This is derived from the AOL data by assuming users are performing queries from the same browser and sessions have a 30 minute timeout (see `sessionup`). It is a random string of 32 bytes.
+* The third column is the user id. This is preserved from the AOL data. It is an integer.
+* The fourth column is the date of the request, e.g. `2006-03-20 03:55:57`.
+* The fifth column is the event type, which is one of `search`, `click` or `appearance`.
 
 Those columns are common to all events. However the later columns depend on the event type.
 
 search events:
 
-* The fifth column is a space seperated list of search terms. Each term is a hashed 64 byte string. Because of the one-way random-seeded hash you cannot perform a reverse operation to find out what they originally searched for. This is good because the data was very private.
+* The sixth column is a space seperated list of search terms. Each term is a 32 byte string. Because of the one-way random-seeded hash you cannot perform a reverse operation to find out what they originally searched for. This is good because the data was very private.
 
 click events:
 
-* The fifth column is the website that the user clicked on. Like search terms the data has been put through an anonymizing hash and is a 64 byte string.
-* The sixth column is the ranking of the click. An click of "1" means it had the first rank.
+* The sixth column is the website that the user clicked on. Like search terms the data has been put through an anonymizing hash and is a 32 byte string.
+* The seventh column is the ranking of the click. An click of "1" means it had the first rank.
 
 appearance events:
 
-* The fifth column is the website that appeared in a search result. It is an anonymous 64 byte string.
-* The sixth column is the ranking of the appearance. An appearance of "0" means it had the first rank.
+* The sixth column is the website that appeared in a search result. It is an anonymous 32 byte string.
+* The seventh column is the ranking of the appearance. An appearance of "0" means it had the first rank.
 
